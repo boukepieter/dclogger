@@ -1,0 +1,13 @@
+Package: dclogger
+Type: Package
+Title: Log data cleaning changes
+Version: 0.1.0
+Author: Bouke Pieter Ottow
+Maintainer: Bouke Pieter Ottow <boukepieter@gmail.com>
+Description: Log data cleaning changes on a data frame (for example from an ODK dataset).
+    It facilitates creation of a cleaning log (csv), structured adding changes to the log and execute all the logged changes on a dataset.
+Depends: R (>=3.5.3)
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Imports: 
