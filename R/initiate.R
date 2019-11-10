@@ -9,9 +9,9 @@
 #' dir <- getwd()
 #' extra_columns <- list(population_group = "population_group", governorate = "governorate_mcna")
 #' \dontrun{
-#' init.cleaning.log(dir, extra_columns = extra_columns)
+#' init_cleaning_log(dir, extra_columns = extra_columns)
 #' }
-init.cleaning.log <- function(dir, filename = "cleaning_logbook.csv", extra_columns = NULL){
+init_cleaning_log <- function(dir, filename = "cleaning_logbook.csv", extra_columns = NULL){
   if (!endsWith(filename, ".csv")) stop("Filename extention has to be .csv")
   log_file <- sprintf("%s/%s", dir, filename)
   if (file.exists(log_file)){

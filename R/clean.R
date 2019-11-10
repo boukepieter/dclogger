@@ -8,33 +8,34 @@
 #' and the content of the list being the names of the dataset columns associated with it (see example). This is not required.
 #' But it should be the same as the initiated logbook.
 #' @param question.name The name of the column in which the value is that needs to be flagged or changed.
-#' @param new.value The value that the old value needs to be changed to (only for change action).
+#' @param new.value The value that the old value needs to be changed to (only for change action). Must be either same length as
+#' uuid vector or lenght 1 (if all need to be changed to same value).
 #' @param issue A description of the issue why it is being cleaned.
 #' @param dir The directory name of the location where it needs to be saved.
 #' @param filename Name of the logbook. Default is cleaning_logbook.csv. Needs to have a csv extention.
 #' @return It returns the logbook as data.frame.
 #' @examples
 #' dir <- getwd()
-#' print(dir)
 #' extra_columns <- list(population_group = "population_group", governorate = "governorate_mcna")
 #' \dontrun{
-#' init.cleaning.log(dir, extra_columns = extra_columns)
-#' }
+#' init_cleaning_log(dir, extra_columns = extra_columns)
 #'
 #' data(mcna2019)
-#' \dontrun{
 #' library(dplyr)
-#' idp_first_place <- data %>% filter(idp_first_place == "yes")
+#' idp_first_place <- mcna2019 %>% dplyr::filter(idp_first_place == "yes")
 #' flag <- difftime(as.POSIXct(idp_first_place$arrival_date_idp, format="%Y-%m-%d"),
-#'                  as.POSIXct(idp_first_place$displace_date_idp, format="%Y-%m-%d"), units = "weeks") > 4
+#'                  as.POSIXct(idp_first_place$displace_date_idp, format="%Y-%m-%d"),
+#'                  units = "weeks") > 4
 #' idp_first_place[which(flag), c("displace_date_idp", "arrival_date_idp")]
 #' uuid <- idp_first_place$X_uuid[which(flag)]
-#' log <- log.cleaning(mcna2019, uuid, action = "f",  extra_columns = extra_columns,
+#' log <- log_cleaning(mcna2019, uuid, action = "f",  extra_columns = extra_columns,
 #'                                     question.name="arrival_date_idp",
-#'                                     issue="The difference between displace date and arrival date while it being first place of displacement is more than 4 weeks",
+#'                                     issue="The difference between displace date
+#'                                     and arrival date while it being first place of
+#'                                     displacement is more than 4 weeks",
 #'                                     dir = dir)
 #' }
-log.cleaning <- function(data, uuid, action, extra_columns = list(),
+log_cleaning <- function(data, uuid, action, extra_columns = list(),
                          question.name = NULL, new.value = NULL, issue = NULL,
                          dir, filename = "cleaning_logbook.csv") {
   action <- ifelse(action == "c", "change", ifelse(action == "d", "deletion", ifelse(action == "f", "flag", action)))
@@ -76,7 +77,8 @@ log.cleaning <- function(data, uuid, action, extra_columns = list(),
       log$old.value[nrow(log)] <- data[row_nr, question.name]
     }
     if (action == "change") {
-      log$new.value[nrow(log)] <- new.value
+      newval <- ifelse(length(new.value) == 1, new.value, new.value[i])
+      log$new.value[nrow(log)] <- newval
     }
   }
   write.csv(log, log_file, row.names = F, fileEncoding = "UTF-8")
