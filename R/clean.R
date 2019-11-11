@@ -66,7 +66,7 @@ log_cleaning <- function(data, uuid, action, extra_columns = list(),
   for (i in 1:length(uuid)){
     log[nrow(log)+1,"uuid"] <- uuid[i]
     row_nr <- which(data$X_uuid == uuid[i])
-    if(length(row_nr > 1)) {
+    if(length(row_nr) > 1) {
       warning("UUID is not unique, use it only for flagging because executing changes or deletions in this way will give unexpected results.")
       row_nr <- row_nr[1]
     }
