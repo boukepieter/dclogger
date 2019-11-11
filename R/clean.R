@@ -66,6 +66,10 @@ log_cleaning <- function(data, uuid, action, extra_columns = list(),
   for (i in 1:length(uuid)){
     log[nrow(log)+1,"uuid"] <- uuid[i]
     row_nr <- which(data$X_uuid == uuid[i])
+    if(length(row_nr > 1)) {
+      warning("UUID is not unique, use it only for flagging because executing changes or deletions in this way will give unexpected results.")
+      row_nr <- row_nr[1]
+    }
     log$log_date[nrow(log)] <- format(Sys.Date(), "%d-%m-%Y")
     for (j in 1:length(extra_columns)) {
       log[nrow(log), names(extra_columns)[j]] <- data[row_nr, extra_columns[[j]]]
