@@ -38,6 +38,9 @@
 log_cleaning <- function(data, uuid, action, extra_columns = list(),
                          question.name = NULL, new.value = NULL, issue = NULL,
                          dir, filename = "cleaning_logbook.csv") {
+  if (length(uuid) == 0) {
+    stop("uuid parameter is empty; no records to add to logbook.")
+  }
   action <- ifelse(action == "c", "change", ifelse(action == "d", "deletion", ifelse(action == "f", "flag", action)))
   if (class(data) != "data.frame") {
     stop("Dataset should be of class data.frame.")
